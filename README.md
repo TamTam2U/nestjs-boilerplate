@@ -51,7 +51,7 @@ $ npm run start:prod
 $ npm run migrate
 
 # Create Migration
-$ npm run migrate --name=example-name
+$ npm run migration:create --name=example-name
 
 ```
 
