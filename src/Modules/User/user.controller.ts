@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { Response } from '@app/shared/utils/response';
@@ -49,6 +49,26 @@ export class UserController {
       return Response.error({
         message: 'User not created',
         status: 422,
+      });
+    }
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    description: 'Get user',
+  })
+  @Get('/find/:id')
+  async findById(@Param('id') id: number) {
+    const data = await this.userService.findById(id);
+    if (data) {
+      return Response.success({
+        message: 'User found',
+        data: data,
+      });
+    } else {
+      return Response.error({
+        message: 'User not found',
+        status: 404,
       });
     }
   }
