@@ -44,7 +44,7 @@ export const setupSwagger = (app: INestApplication) => {
       app,
       new DocumentBuilder()
         .setTitle('API')
-        .setDescription('API')
+        .setDescription('Made by TamTam2U')
         .setVersion(version)
         .addBearerAuth()
         .addServer(swaggerHost)
