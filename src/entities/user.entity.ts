@@ -1,18 +1,8 @@
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  Timestamp,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { Base } from './base.entity';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@Entity('users')
+export class User extends Base {
   @Column()
   name: string;
 
@@ -21,13 +11,4 @@ export class User {
 
   @Column()
   password: string;
-
-  @CreateDateColumn()
-  created_at: Timestamp;
-
-  @UpdateDateColumn()
-  updated_at: Timestamp;
-
-  @DeleteDateColumn()
-  deleted_at: Timestamp;
 }

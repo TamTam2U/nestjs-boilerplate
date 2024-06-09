@@ -9,7 +9,7 @@ export const setupSwagger = (app: INestApplication) => {
 
   if (configService.get<string>('NODE_ENV') !== 'prod') {
     const swaggerPath = configService.get<string>('swagger.swaggerPath');
-    const swaggerHost = configService.get<string>('swagger.swaggerHost');
+    // const swaggerHost = configService.get<string>('swagger.swaggerHost');
     const version = configService.get<string>('app.version');
     const swaggerUsername = configService.get<string>(
       'swagger.swaggerUsername',
@@ -47,7 +47,7 @@ export const setupSwagger = (app: INestApplication) => {
         .setDescription('Made by TamTam2U')
         .setVersion(version)
         .addBearerAuth()
-        .addServer(swaggerHost)
+        // .addServer(swaggerHost)
         .build(),
     );
 
