@@ -26,6 +26,13 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Features
+
+    NestJS: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+    TypeORM: An ORM that supports both Active Record and Data Mapper patterns, making it easy to manage database interactions.
+    Swagger: Automatically generated API documentation, allowing easy exploration and testing of endpoints.
+    Best Practices: Pre-configured with best practices for project structure, error handling, and security.
+
 ## Installation
 
 ```bash
