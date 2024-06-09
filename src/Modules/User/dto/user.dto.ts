@@ -27,3 +27,22 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class UpdateUserDto {
+  @ApiProperty({
+    description: 'User name',
+    type: 'string',
+    required: true,
+  })
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({
+    description: 'User email',
+    type: 'string',
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+}

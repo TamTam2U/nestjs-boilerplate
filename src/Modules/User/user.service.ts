@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { plainToClass } from 'class-transformer';
 
@@ -25,6 +25,12 @@ export class UserService {
   }
 
   async create(userDto: CreateUserDto): Promise<User> {
+    const userExist = await this.userRepository.findOne({
+      where: { email: userDto.email },
+    });
+    if (userExist) {
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
+    }
     const user = new User();
     user.name = userDto.name;
     user.email = userDto.email;
@@ -33,17 +39,10 @@ export class UserService {
     try {
       return await this.userRepository.save(user);
     } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
-        throw new HttpException(
-          'Email already exists',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      } else {
-        throw new InternalServerErrorException({
-          message: 'An error occurred while creating the user',
-          error: error.message,
-        });
-      }
+      throw new InternalServerErrorException({
+        message: 'An error occurred while creating the user',
+        error: error.message,
+      });
     }
   }
 
@@ -53,5 +52,38 @@ export class UserService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     return plainToClass(User, users);
+  }
+
+  async update(id: number, userDto: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    user.name = userDto.name;
+    user.email = userDto.email;
+    try {
+      return await this.userRepository.save(user);
+    } catch (error) {
+      throw new InternalServerErrorException({
+        message: 'An error occurred while updating the user',
+        error: error.message,
+      });
+    }
+  }
+
+  async delete(id: number): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    try {
+      await this.userRepository.softDelete(id);
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException({
+        message: 'An error occurred while deleting the user',
+        error: error.message,
+      });
+    }
   }
 }

@@ -1,8 +1,16 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { Response } from '@app/shared/utils/response';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 
 @ApiTags('User')
 @Controller('/api/user')
@@ -69,6 +77,49 @@ export class UserController {
       return Response.error({
         message: 'User not found',
         status: 404,
+      });
+    }
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    description: 'Update user',
+  })
+  @Put('/update/:id')
+  @ApiBody({
+    type: UpdateUserDto,
+    description: 'Update user',
+  })
+  async update(@Param('id') id: number, @Body() updateUser: UpdateUserDto) {
+    const data = await this.userService.update(id, updateUser);
+    if (data) {
+      return Response.success({
+        message: 'User updated',
+        data: data,
+      });
+    } else {
+      return Response.error({
+        message: 'User not updated',
+        status: 422,
+      });
+    }
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    description: 'Delete user',
+  })
+  @Delete('/delete/:id')
+  async delete(@Param('id') id: number) {
+    const data = await this.userService.delete(id);
+    if (data) {
+      return Response.success({
+        message: 'User deleted',
+      });
+    } else {
+      return Response.error({
+        message: 'User not deleted',
+        status: 422,
       });
     }
   }

@@ -1,8 +1,8 @@
 export const Response = {
   success: ({
     message = 'Success',
-    data = null,
     status = 200,
+    data = [],
   }: {
     message?: string;
     data?: any;
@@ -16,7 +16,7 @@ export const Response = {
   },
   error: ({
     message = 'Error',
-    data = null,
+    data = [],
     status = 422,
   }: {
     message?: string;
