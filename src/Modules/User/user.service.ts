@@ -1,4 +1,4 @@
-import { User } from '@app/entities/user.entity';
+import { User } from '../../entities/user.entity';
 import {
   HttpException,
   HttpStatus,
@@ -25,12 +25,6 @@ export class UserService {
   }
 
   async create(userDto: CreateUserDto): Promise<User> {
-    const userExist = await this.userRepository.findOne({
-      where: { email: userDto.email },
-    });
-    if (userExist) {
-      throw new HttpException('User already exists', HttpStatus.CONFLICT);
-    }
     const user = new User();
     user.name = userDto.name;
     user.email = userDto.email;
@@ -84,6 +78,13 @@ export class UserService {
         message: 'An error occurred while deleting the user',
         error: error.message,
       });
+    }
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (user) {
+      return plainToClass(User, user);
     }
   }
 }
