@@ -53,6 +53,15 @@ export class UserService {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
+    const cekEmail = await this.userRepository.findOne({
+      where: { email: userDto.email },
+    });
+    if (cekEmail && cekEmail.id !== id) {
+      throw new HttpException(
+        'Email already exists',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     user.name = userDto.name;
     user.email = userDto.email;
     try {
